@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.29920.165
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EF-Adapter", "EF-Adapter\EF-Adapter.csproj", "{C654B809-43C5-4C3D-B9A8-1D11FA597B1A}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EF-Adapter.UnitTest", "EF-Adapter.UnitTest\EF-Adapter.UnitTest.csproj", "{BBF1788F-3D18-4180-9B85-C21B9B4DD075}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{C654B809-43C5-4C3D-B9A8-1D11FA597B1A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C654B809-43C5-4C3D-B9A8-1D11FA597B1A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C654B809-43C5-4C3D-B9A8-1D11FA597B1A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C654B809-43C5-4C3D-B9A8-1D11FA597B1A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BBF1788F-3D18-4180-9B85-C21B9B4DD075}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BBF1788F-3D18-4180-9B85-C21B9B4DD075}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BBF1788F-3D18-4180-9B85-C21B9B4DD075}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BBF1788F-3D18-4180-9B85-C21B9B4DD075}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {80EFC958-0A46-4940-866E-6ABFB724280A}
+	EndGlobalSection
+EndGlobal

@@ -1,5 +1,4 @@
 using NetCasbin.Persist;
-using NetCasbin;
 using System.Collections.Generic;
 using System.Text;
 using System.Linq;
@@ -16,7 +15,7 @@ namespace Casbin.NET.Adapter.EF
 
         public CasbinDbAdapter(CasbinDbContext<TKey> context)
         {
-            _context = context;
+            _context = context ?? throw new ArgumentNullException(nameof(context));
         }
 
         #region sync operations

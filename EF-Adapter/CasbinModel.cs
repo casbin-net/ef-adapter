@@ -1,5 +1,4 @@
 using System.Data.Entity;
-using System.Data.Entity.ModelConfiguration;
 using System;
 using Casbin.NET.Adapter.EF.Model;
 
@@ -11,11 +10,6 @@ namespace Casbin.NET.Adapter.EF
 
 
         public CasbinDbContext(string databaseConnectionString)
-            : this(databaseConnectionString, new ValidateDbInitializer<CasbinDbContext<TKey>>(), false)
-        {
-        }
-
-        public CasbinDbContext(string databaseConnectionString, EntityTypeConfiguration<CasbinDbContext<TKey>> entityType)
             : this(databaseConnectionString, new ValidateDbInitializer<CasbinDbContext<TKey>>(), false)
         {
         }

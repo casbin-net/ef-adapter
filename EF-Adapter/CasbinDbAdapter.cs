@@ -9,11 +9,11 @@ using Casbin.NET.Adapter.EF.Model;
 
 namespace Casbin.NET.Adapter.EF
 {
-    public class CasbinDbAdapter<TKey> : IAdapter where TKey : IEquatable<TKey>
+    public class CasbinDbAdapter : IAdapter 
     {
-        private readonly CasbinDbContext<TKey> _context;
+        private readonly CasbinDbContext _context;
 
-        public CasbinDbAdapter(CasbinDbContext<TKey> context)
+        public CasbinDbAdapter(CasbinDbContext context)
         {
             _context = context ?? throw new ArgumentNullException(nameof(context));
         }
@@ -110,7 +110,7 @@ namespace Casbin.NET.Adapter.EF
 
         #region helper functions
 
-        private void LoadPolicyData(NetCasbin.Model.Model model, Helper.LoadPolicyLineHandler<string, NetCasbin.Model.Model> handler, IEnumerable<CasbinRule<TKey>> rules)
+        private void LoadPolicyData(NetCasbin.Model.Model model, Helper.LoadPolicyLineHandler<string, NetCasbin.Model.Model> handler, IEnumerable<CasbinRule> rules)
         {
             foreach (var rule in rules)
             {
@@ -118,7 +118,7 @@ namespace Casbin.NET.Adapter.EF
             }
         }
 
-        private string GetPolicyContent(CasbinRule<TKey> rule)
+        private string GetPolicyContent(CasbinRule rule)
         {
             StringBuilder sb = new StringBuilder(rule.PType);
             void Append(string v)
@@ -138,9 +138,9 @@ namespace Casbin.NET.Adapter.EF
             return sb.ToString();
         }
 
-        private List<CasbinRule<TKey>> SavePolicyLines(NetCasbin.Model.Model model)
+        private List<CasbinRule> SavePolicyLines(NetCasbin.Model.Model model)
         {
-            List<CasbinRule<TKey>> lines = new List<CasbinRule<TKey>>();
+            List<CasbinRule> lines = new List<CasbinRule>();
             if (model.Model.ContainsKey("p"))
             {
                 foreach (var kv in model.Model["p"])
@@ -169,9 +169,9 @@ namespace Casbin.NET.Adapter.EF
             }
             return lines;
         }
-        private CasbinRule<TKey> SavePolicyLine(string ptype, IList<string> rule)
+        private CasbinRule SavePolicyLine(string ptype, IList<string> rule)
         {
-            var line = new CasbinRule<TKey>();
+            var line = new CasbinRule();
             line.PType = ptype;
             if (rule.Any())
             {
@@ -201,9 +201,9 @@ namespace Casbin.NET.Adapter.EF
             return line;
         }
 
-        private CasbinRule<TKey> SavePolicyLine(string sec, string ptype, int fieldIndex, params string[] fieldValues)
+        private CasbinRule SavePolicyLine(string sec, string ptype, int fieldIndex, params string[] fieldValues)
         {
-            var line = new CasbinRule<TKey>
+            var line = new CasbinRule
             {
                 PType = ptype
             };
@@ -235,7 +235,7 @@ namespace Casbin.NET.Adapter.EF
             return line;
         }
 
-        private IQueryable<CasbinRule<TKey>> ApplyQueryFilter(IQueryable<CasbinRule<TKey>> query, CasbinRule<TKey> line)
+        private IQueryable<CasbinRule> ApplyQueryFilter(IQueryable<CasbinRule> query, CasbinRule line)
         {
             if (!string.IsNullOrEmpty(line.V0))
             {

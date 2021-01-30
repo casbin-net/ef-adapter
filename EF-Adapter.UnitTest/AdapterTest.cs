@@ -1,78 +1,97 @@
-﻿using System;
+﻿using System.Collections.Generic;
+using System.Data.Entity;
 using System.Linq;
 using Casbin.NET.Adapter.EF;
+using Casbin.NET.Adapter.EF.Model;
 using EF_Adapter.Test;
-using Microsoft.EntityFrameworkCore;
+using Moq;
 using NetCasbin;
 using Xunit;
 
 namespace EF_Adapter.UnitTest
 {
-    public class AdapterTest : TestUtil, IDisposable
+    public class AdapterTest : TestUtil
     {
-        public CasbinDbContext<int> _context { get; set; }
+        internal Mock<CasbinDbContext> _contextMock { get; set; }
 
         public AdapterTest()
         {
-            var options = new DbContextOptionsBuilder<CasbinDbContext<int>>()
-                .UseSqlite("Data Source=casbin_test.sqlite3")
-                .Options;
+            _contextMock = new Mock<CasbinDbContext>("test-connectionString");
 
-            _context = new CasbinDbContext<int>(options);
-            _context.Database.EnsureCreated();
             InitPolicy();
-        }
-
-        public void Dispose()
-        {
-            _context.RemoveRange(_context.CasbinRule);
-            _context.SaveChanges();
         }
 
         private void InitPolicy()
         {
-            _context.CasbinRule.Add(new CasbinRule<int>()
+            var casbinRules = new List<CasbinRule>();
+            casbinRules.Add(new CasbinRule()
             {
                 PType = "p",
                 V0 = "alice",
                 V1 = "data1",
                 V2 = "read",
             });
-            _context.CasbinRule.Add(new CasbinRule<int>()
+            casbinRules.Add(new CasbinRule()
             {
                 PType = "p",
                 V0 = "bob",
                 V1 = "data2",
                 V2 = "write",
             });
-            _context.CasbinRule.Add(new CasbinRule<int>()
+            casbinRules.Add(new CasbinRule()
             {
                 PType = "p",
                 V0 = "data2_admin",
                 V1 = "data2",
                 V2 = "read",
             });
-            _context.CasbinRule.Add(new CasbinRule<int>()
+            casbinRules.Add(new CasbinRule()
             {
                 PType = "p",
                 V0 = "data2_admin",
                 V1 = "data2",
                 V2 = "write",
             });
-            _context.CasbinRule.Add(new CasbinRule<int>()
+            casbinRules.Add(new CasbinRule()
             {
                 PType = "g",
                 V0 = "alice",
                 V1 = "data2_admin",
             });
-            _context.SaveChanges();
+
+            var querableRules = casbinRules.AsQueryable();
+
+            var mockSet = new Mock<DbSet<CasbinRule>>();
+
+            mockSet.As<IQueryable<CasbinRule>>().Setup(m => m.Provider).Callback(() => querableRules = casbinRules.AsQueryable()).Returns(querableRules.Provider);
+            mockSet.As<IQueryable<CasbinRule>>().Setup(m => m.Expression).Callback(() => querableRules = casbinRules.AsQueryable()).Returns(querableRules.Expression);
+            mockSet.As<IQueryable<CasbinRule>>().Setup(m => m.ElementType).Callback(() => querableRules = casbinRules.AsQueryable()).Returns(querableRules.ElementType);
+            mockSet.As<IQueryable<CasbinRule>>().Setup(m => m.GetEnumerator()).Callback(() => querableRules = casbinRules.AsQueryable()).Returns(querableRules.GetEnumerator());
+            mockSet.Setup(x => x.AsNoTracking()).Callback(() => querableRules = casbinRules.AsQueryable()).Returns(mockSet.Object);
+
+
+            _contextMock.Setup(c => c.CasbinRule).Returns(mockSet.Object);
+            _contextMock.Setup(c => c.CasbinRule.Add(It.IsAny<CasbinRule>())).Callback<CasbinRule>(s =>
+            {
+                casbinRules.Add(s);
+            });
+            _contextMock.Setup(c => c.CasbinRule.RemoveRange(It.IsAny<IEnumerable<CasbinRule>>())).Callback<IEnumerable<CasbinRule>>(s =>
+            {
+                var items = s.ToList();
+                foreach (var item in items)
+                {
+                    casbinRules.Remove(item);
+                }
+            });
         }
 
         [Fact]
         public void Test_Adapter_AutoSave()
         {
-            var efAdapter = new CasbinDbAdapter<int>(_context);
+
+            var efAdapter = new CasbinDbAdapter(_contextMock.Object);
             Enforcer e = new Enforcer("examples/rbac_model.conf", efAdapter);
+            var _context = _contextMock.Object;
 
             TestGetPolicy(e, AsList(
                 AsList("alice", "data1", "read"),

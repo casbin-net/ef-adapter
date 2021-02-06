@@ -36,7 +36,7 @@
 # For a complete CI/CD sample to get started with GitHub Action workflows for Desktop Applications,
 # refer to https://github.com/microsoft/github-actions-for-desktop-apps
 
-name: .NET Core Desktop
+name: EF-Adapter
 
 on:
   push:
@@ -57,9 +57,8 @@ jobs:
 
     env:
       Solution_Name: EF-Adapter.sln                             
-      Test_Project_Path: EF-Adapter.UnitTest/EF-Adapter.UnitTest.csproj 
+      Test_Project_Path: EF-Adapter.UnitTest\EF-Adapter.UnitTest.csproj 
       Actions_Allow_Unsecure_Commands: true # Allows AddPAth and SetEnv commands
-      DOTNET_CLI_TELEMETRY_OPTOUT: true # disable telemetry optout 
 
 
     steps:
@@ -72,7 +71,7 @@ jobs:
     - name: Install .NET Core
       uses: actions/setup-dotnet@v1
       with:
-        dotnet-version: 5.0.x
+        dotnet-version: 3.1.x
 
     # Add  MSBuild to the PATH: https://github.com/microsoft/setup-msbuild
     - name: Setup MSBuild.exe
@@ -97,3 +96,5 @@ jobs:
         Appx_Bundle_Platforms: x86|x64
         Appx_Package_Build_Mode: StoreUpload
         Configuration: ${{ matrix.configuration }}
+
+    # todo add nuget pack steps 

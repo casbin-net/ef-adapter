@@ -58,6 +58,7 @@ jobs:
     env:
       Solution_Name: EF-Adapter.sln                             
       Test_Project_Path: EF-Adapter.UnitTest/EF-Adapter.UnitTest.csproj 
+      Actions_Allow_Unsecure_Commands: true # Allows AddPAth and SetEnv commands
 
     steps:
     - name: Checkout
@@ -77,7 +78,7 @@ jobs:
 
     # Execute all unit tests in the solution
     - name: Execute unit tests
-      run: dotnet test
+      run: dotnet test $env:Test_Project_Path
 
     # Restore the application to populate the obj folder with RuntimeIdentifiers
     - name: Restore the application

@@ -59,6 +59,7 @@ jobs:
       Solution_Name: EF-Adapter.sln                             
       Test_Project_Path: EF-Adapter.UnitTest/EF-Adapter.UnitTest.csproj 
       Actions_Allow_Unsecure_Commands: true # Allows AddPAth and SetEnv commands
+      DOTNET_CLI_TELEMETRY_OPTOUT: true # disable telemetry optout 
 
     steps:
     - name: Checkout

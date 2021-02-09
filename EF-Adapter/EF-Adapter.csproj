@@ -3,8 +3,18 @@
   <PropertyGroup>
     <TargetFrameworks>net45;net461;netstandard2.1</TargetFrameworks>
     <RootNamespace>Casbin.NET.Adapter.EF</RootNamespace>
+  </PropertyGroup>
+
+  <PropertyGroup>
     <PackageId>Casbin.NET.Adapter.EF</PackageId>
     <Version>1.2.1</Version>
+    <PackageIcon>casbin.png</PackageIcon>
+    <Authors>Casbin.NET</Authors>
+    <RepositoryType>GIT</RepositoryType>
+    <Copyright>Apache License 2.0</Copyright>
+    <PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>
+    <RepositoryUrl>https://github.com/casbin-net/EF-Adapter</RepositoryUrl>
+    <PackageProjectUrl>https://github.com/casbin-net/EF-Adapter</PackageProjectUrl>
   </PropertyGroup>
 
   <ItemGroup>
@@ -12,4 +22,7 @@
     <PackageReference Include="EntityFramework" Version="6.4.4" />
   </ItemGroup>
 
+  <ItemGroup>
+    <None Include="casbin.png" Pack="true" Visible="false" PackagePath="" />
+  </ItemGroup>
 </Project>

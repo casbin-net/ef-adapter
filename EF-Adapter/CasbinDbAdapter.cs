@@ -20,17 +20,32 @@ namespace Casbin.NET.Adapter.EF
 
         #region sync operations
 
+        /// <inheritdoc />
         public void LoadPolicy(NetCasbin.Model.Model model)
         {
             var rules = _context.CasbinRule.AsNoTracking().ToList();
             LoadPolicyData(model, Helper.LoadPolicyLine, rules);
         }
-        
+
+        /// <inheritdoc />
         public void RemovePolicy(string sec, string ptype, IList<string> rule)
         {
             RemoveFilteredPolicy(sec, ptype, 0, rule.ToArray());
         }
 
+        /// <inheritdoc />
+        public void AddPolicies(string sec, string ptype, IEnumerable<IList<string>> rules)
+        {
+            Task.FromResult(AddPoliciesAsync(sec, ptype, rules));
+        }
+        /// <inheritdoc />
+        public void RemovePolicies(string sec, string ptype, IEnumerable<IList<string>> rules)
+        {
+            Task.FromResult(RemovePoliciesAsync(sec, ptype, rules));
+        }
+
+
+        /// <inheritdoc />
         public void RemoveFilteredPolicy(string sec, string ptype, int fieldIndex, params string[] fieldValues)
         {
             if (fieldValues == null || !fieldValues.Any())
@@ -44,6 +59,7 @@ namespace Casbin.NET.Adapter.EF
             _context.SaveChanges();
         }
 
+        /// <inheritdoc />
         public void SavePolicy(NetCasbin.Model.Model model)
         {
             var lines = SavePolicyLines(model);
@@ -54,6 +70,7 @@ namespace Casbin.NET.Adapter.EF
             }
         }
 
+        /// <inheritdoc />
         public void AddPolicy(string sec, string ptype, IList<string> rule)
         {
             var line = SavePolicyLine(ptype, rule);
@@ -65,12 +82,26 @@ namespace Casbin.NET.Adapter.EF
 
         #region async operations
 
+        /// <inheritdoc />
+        public async Task AddPoliciesAsync(string sec, string ptype, IEnumerable<IList<string>> rules)
+        {
+            await Task.Run(() => AddPoliciesAsync(sec, ptype, rules));
+        }
+
+        /// <inheritdoc />
+        public async Task RemovePoliciesAsync(string sec, string ptype, IEnumerable<IList<string>> rules)
+        {
+            await Task.Run(() => RemovePolicies(sec, ptype, rules));
+        }
+
+        /// <inheritdoc />
         public async Task LoadPolicyAsync(NetCasbin.Model.Model model)
         {
             var rules = await _context.CasbinRule.AsNoTracking().ToListAsync();
             LoadPolicyData(model, Helper.LoadPolicyLine, rules);
         }
 
+        /// <inheritdoc />
         public async Task SavePolicyAsync(NetCasbin.Model.Model model)
         {
             var lines = SavePolicyLines(model);
@@ -81,6 +112,7 @@ namespace Casbin.NET.Adapter.EF
             }
         }
 
+        /// <inheritdoc />
         public async Task AddPolicyAsync(string sec, string ptype, IList<string> rule)
         {
             var line = SavePolicyLine(ptype, rule);
@@ -88,10 +120,13 @@ namespace Casbin.NET.Adapter.EF
             await _context.SaveChangesAsync();
         }
 
+        /// <inheritdoc />
         public async Task RemovePolicyAsync(string sec, string ptype, IList<string> rule)
         {
             await RemoveFilteredPolicyAsync(sec, ptype, 0, rule.ToArray());
         }
+
+
 
         public async Task RemoveFilteredPolicyAsync(string sec, string ptype, int fieldIndex, params string[] fieldValues)
         {
@@ -107,6 +142,7 @@ namespace Casbin.NET.Adapter.EF
             await _context.SaveChangesAsync();
         }
         #endregion
+
 
         #region helper functions
 

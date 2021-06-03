@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>netcoreapp3.1</TargetFramework>
+    <TargetFrameworks>net452;net461;netcoreapp3.1</TargetFrameworks>
     <RootNamespace>EF_Adapter.UnitTest</RootNamespace>
 
     <IsPackable>false</IsPackable>

@@ -36,12 +36,19 @@ namespace Casbin.NET.Adapter.EF
         /// <inheritdoc />
         public void AddPolicies(string sec, string ptype, IEnumerable<IList<string>> rules)
         {
-            Task.FromResult(AddPoliciesAsync(sec, ptype, rules));
+            foreach (var rule in rules)
+            {
+                AddPolicy(sec, ptype, rule);
+            }
         }
+        
         /// <inheritdoc />
         public void RemovePolicies(string sec, string ptype, IEnumerable<IList<string>> rules)
         {
-            Task.FromResult(RemovePoliciesAsync(sec, ptype, rules));
+            foreach (var rule in rules)
+            {
+                RemovePolicy(sec, ptype, rule.ToList());
+            }
         }
 
 
@@ -85,13 +92,24 @@ namespace Casbin.NET.Adapter.EF
         /// <inheritdoc />
         public async Task AddPoliciesAsync(string sec, string ptype, IEnumerable<IList<string>> rules)
         {
-            await Task.Run(() => AddPoliciesAsync(sec, ptype, rules));
+            var lines = new List<CasbinRule>();
+            foreach (var rule in rules)
+            {
+                lines.Add(SavePolicyLine(ptype, rule));
+            }
+
+            _context.CasbinRule.AddRange(lines);
+            await _context.SaveChangesAsync();
+
         }
 
         /// <inheritdoc />
         public async Task RemovePoliciesAsync(string sec, string ptype, IEnumerable<IList<string>> rules)
         {
-            await Task.Run(() => RemovePolicies(sec, ptype, rules));
+            foreach (var rule in rules)
+            {
+                await RemovePolicyAsync(sec, ptype, rule);
+            }
         }
 
         /// <inheritdoc />

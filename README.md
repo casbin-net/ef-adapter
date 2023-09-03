@@ -1,7 +1,7 @@
 # Entity Framework Adapter for Casbin.NET
 [![Actions Status](https://github.com/casbin-net/ef-adapter/workflows/Build/badge.svg)](https://github.com/casbin-net/ef-adapter/actions)
 [![Coverage Status](https://coveralls.io/repos/github/casbin-net/ef-adapter/badge.svg?branch=master)](https://coveralls.io/github/casbin-net/ef-adapter?branch=master)
-[![NuGet](https://buildstats.info/nuget/Casbin.NET.Adapter.EF)](https://www.nuget.org/packages/Casbin.NET.Adapter.EF)
+[![NuGet](https://img.shields.io/nuget/v/Casbin.NET.Adapter.EF)](https://www.nuget.org/packages/Casbin.NET.Adapter.EF)
 
 Entity Framework Adapter for [Casbin](https://github.com/casbin/casbin). With this library, Casbin can load policy from EF supported database or save policy to it.
 
